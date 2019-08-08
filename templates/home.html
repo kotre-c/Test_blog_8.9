@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block title %}
+    我的博客|首页
+{% endblock %}
+
+
+{% block content %}
+    <h1 class="home-content">欢迎访问我的博客</h1>
+{% endblock %}
+
+{% block js %}
+    {# 将首页这个按钮设置激活状态 #}
+    <script>
+        $(".nav-home").addClass("active").siblings().removeClass("active");
+    </script>
+{% endblock %}

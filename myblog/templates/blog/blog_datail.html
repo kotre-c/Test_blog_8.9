@@ -1,0 +1,61 @@
+{# 引用模板 #}
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'blog/blog.css' %}">
+{% endblock %}
+
+
+{# 标题 #}
+{% block title %}
+    {{ blog.title }}
+{% endblock %}
+
+{# 内容#}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6 offset-1">
+                <ul class="blog-info-description">
+                    <h3>{{ blog.title }}</h3>
+                    <li>作者：{{ blog.author }}</li>
+                    {# 时间过滤器让时间按照自己需要的格式过滤 #}
+                    <li>发布日期：{{ blog.created_time|date:"Y-m-d H:n:s" }}</li>
+                    <li>分类：
+                        <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">
+                            {{ blog.blog_type }}
+                        </a>
+                    </li>
+                </ul>
+                <p class="blog-content">{{ blog.content }}</p>
+
+
+                <p>上一篇：
+                    {% if previous_blog %}
+                       <a href="{% url 'blog_detail' previous_blog.pk %}">{{ previous_blog.title }}</a>
+                    {% else %}
+                        <span>没有了</span>
+                    {% endif %}
+                </p>
+                <p>下一篇：
+                    {% if next_blog %}
+                        <a href="{% url 'blog_detail' next_blog.pk %}">{{ next_blog.title }}</a>
+                    {% else %}
+                        <span>没有了</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(".nav-blog").addClass("active").siblings().removeClass("active");
+    </script>
+{% endblock %}
+
+blog_detail.html
