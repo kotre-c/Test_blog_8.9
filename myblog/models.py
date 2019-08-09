@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 from ckeditor_uploader.fields import RichTextUploadingField
-# from django.db.models.fields import exceptions   # 导入异常
 from django.contrib.contenttypes.models import ContentType
-from read_statistics.models import ReadNumExpandMethod, ReadNum
+from read_statistics.models import ReadNumExpandMethod, ReadDetail
 
 
 # Create your models here.
@@ -22,14 +22,13 @@ class Blog(models.Model, ReadNumExpandMethod):
     blog_type = models.ForeignKey(BlogType, on_delete=models.DO_NOTHING)  # 博客分类
     content = RichTextUploadingField()  # 博客内容，使用富文本编辑
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING)  # 博客作者
+    read_details = GenericRelation(ReadDetail)  # 关联到阅读表
     created_time = models.DateTimeField(auto_now_add=True)  # 博客创建时间
     last_updated_time = models.DateTimeField(auto_now=True)  # 博客更新事件
-
 
     def __str__(self):  # 显示标题名
         return "<Blog:{}>".format(self.title)
 
     class Meta:
         ordering = ['-created_time']  # 定义排序规则，按照创建时间倒序
-
 

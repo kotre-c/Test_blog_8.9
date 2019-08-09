@@ -20,10 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('myblog/', include('myblog.urls')),
+    path('', views.home, name='home'),  # 主页路径
     path('admin/', admin.site.urls),
-    path('ckeditor', include('ckeditor_uploader.urls')),
+    path('ckeditor', include('ckeditor_uploader.urls')),  # 配置上传url
+    path('myblog/', include('myblog.urls')),  # 博客app路径
+    path('login/', views.login, name='login'),  # 登
 ]
 # 设置ckeditor的上传
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
