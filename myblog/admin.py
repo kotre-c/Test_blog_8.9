@@ -10,7 +10,7 @@ class BlogTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('title', 'blog_type', 'author', 'created_time', 'last_updated_time')
+    list_display = ('title', 'blog_type', 'author', 'get_read_num', 'created_time', 'last_updated_time')
 
 # 上面的装饰器和这句相同
 # admin.site.register(Blog,BlogAdmin)

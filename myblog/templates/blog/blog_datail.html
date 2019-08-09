@@ -27,6 +27,7 @@
                             {{ blog.blog_type }}
                         </a>
                     </li>
+                    <li>阅读{{ blog.get_read_num }}</li>
                 </ul>
                 <p class="blog-content">{{ blog.content }}</p>
 
@@ -57,5 +58,4 @@
         $(".nav-blog").addClass("active").siblings().removeClass("active");
     </script>
 {% endblock %}
-
-blog_detail.html
+9

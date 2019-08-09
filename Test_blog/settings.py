@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myblog.apps.MyblogConfig',
     'ckeditor',
+    'ckeditor_uploader',
+    'read_statistics.apps.ReadStatisticsConfig',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'myblog.middleware.mymiddleware.My404',  # 添加自己的中间件
+
 ]
 
 ROOT_URLCONF = 'Test_blog.urls'
@@ -124,3 +127,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 
 EACH_PAGE_BLOGS_NUMBER = 3
 
+# media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 配置ckeditor
+CKEDITOR_UPLOAD_PATH = 'upload/'

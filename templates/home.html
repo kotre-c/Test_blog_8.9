@@ -4,6 +4,7 @@
 
 {% block header_extends %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <script src="{% static 'Highcharts-7.1.2/code/highcharts.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -13,6 +14,47 @@
 
 {% block content %}
     <h1 class="home-content">欢迎访问我的博客</h1>
+    <div id="container"></div>
+    <script>
+        // 图表配置
+        let options = {
+            chart: {
+                type: 'line' //指定图表的类型，默认是折线图（line）
+            },
+            title: {
+                text: null // 标题
+            },
+            xAxis: {
+                categories: {{ dates|safe }}   // x 轴分类
+            },
+            yAxis: {
+                title: {
+                    text: null // y 轴标题
+                },
+                labels: {
+                    enabled: false
+                },
+                gridLineDashStyle: 'Dash',
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            credits: {
+                enabled: false // 禁用版权信息
+            },
+            series: [{ // 数据列
+                name: '阅读量', // 数据列名
+                data: {{ read_nums }},// 数据
+                showInLegend: false, // 设置为 false 即为不显示在图例中
+            },]
+        };
+        // 图表初始化函数
+        let chart = Highcharts.chart('container', options);
+    </script>
 {% endblock %}
 
 {% block js %}

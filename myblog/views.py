@@ -2,7 +2,8 @@ from django.shortcuts import render_to_response, get_object_or_404
 from .models import Blog, BlogType
 from django.core.paginator import Paginator
 from django.conf import settings
-
+from django.db.models import Count
+from read_statistics.utils import read_statistics_once_read
 
 # 分页部分公共代码
 def blog_list_common_data(requests, blogs_all_list):
@@ -26,12 +27,19 @@ def blog_list_common_data(requests, blogs_all_list):
                 range(max(current_page_num - 2, 1),
                       min(all_pages + 1, current_page_num + 3)))  # 获取需要显示的页码 并且剔除不符合条件的页码
 
+    blog_dates = Blog.objects.dates('created_time', 'month', order='DESC')
+    blog_dates_dict = {}
+    for blog_date in blog_dates:
+        blog_count = Blog.objects.filter(created_time__year=blog_date.year, created_time__month=blog_date.month).count()
+        blog_dates_dict = {
+            blog_date: blog_count
+        }
     return {
         'blogs': page_of_blogs.object_list,
         'page_of_blogs': page_of_blogs,
-        'blog_types': BlogType.objects.all(),
+        'blog_types': BlogType.objects.annotate(blog_count=Count('blog')),
         'page_range': page_range,
-        'blog_dates': Blog.objects.dates('created_time', 'month', order='DESC')
+        'blog_dates': blog_dates_dict
     }
 
 
@@ -62,11 +70,14 @@ def blogs_with_date(requests, year, month):
 # 博客详情
 def blog_detail(requests, blog_pk):
     blog = get_object_or_404(Blog, pk=blog_pk)
+    obj_key = read_statistics_once_read(requests, blog)
+
     context = {
         'blog': blog,
         'previous_blog': Blog.objects.filter(created_time__gt=blog.created_time).last(),
         'next_blog': Blog.objects.filter(created_time__lt=blog.created_time).first(),
     }
-
-    return render_to_response('blog/blog_datail.html', context)
+    response = render_to_response('blog/blog_datail.html', context)
+    response.set_cookie(obj_key, 'true')
+    return response
 
